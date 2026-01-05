@@ -19,7 +19,7 @@ metadata:
 spec:
   type: service
   lifecycle: production
-  owner: team-backend
+  owner: M
   system: datetime-system
   providesApis:
     - datetime-timezone-api
