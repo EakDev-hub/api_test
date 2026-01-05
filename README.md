@@ -1,6 +1,6 @@
 # DateTime & Timezone API with Calculator
 
-A Node.js REST API for datetime, timezone operations, and calculations with Swagger documentation.
+A Node.js REST API for datetime, timezone operations, and calculations with Swagger documentation and Backstage.io integration.
 
 ## Features
 
@@ -89,3 +89,35 @@ curl -X POST http://localhost:3005/api/calculate/percentage \
   -H "Content-Type: application/json" \
   -d '{"value": 25, "total": 100}'
 ```
+
+
+## Backstage.io Integration
+
+This project is configured for Backstage.io with the following files:
+
+- `catalog-info.yaml` - Component and API definitions for Backstage catalog
+- `openapi.yaml` - OpenAPI 3.0 specification for API documentation
+- `mkdocs.yml` - TechDocs configuration
+- `docs/` - TechDocs documentation
+
+### Registering in Backstage
+
+1. In your Backstage instance, go to "Create" → "Register Existing Component"
+2. Enter the URL to your `catalog-info.yaml` file
+3. Click "Analyze" and then "Import"
+
+### TechDocs
+
+The project includes TechDocs documentation that will be automatically built and displayed in Backstage:
+
+- **index.md** - Overview and quick start
+- **getting-started.md** - Installation and first API calls
+- **api-reference.md** - Complete API endpoint documentation
+
+### Metadata
+
+- **Component Name**: datetime-timezone-api
+- **Type**: service
+- **Owner**: team-backend
+- **System**: datetime-system
+- **Lifecycle**: production

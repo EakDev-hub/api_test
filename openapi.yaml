@@ -1,0 +1,360 @@
+openapi: 3.0.0
+info:
+  title: DateTime & Timezone API with Calculator
+  version: 1.0.0
+  description: API for getting current datetime, timezone information, and performing calculations
+  contact:
+    name: API Support
+    email: support@example.com
+servers:
+  - url: http://localhost:3005
+    description: Development server
+  - url: https://api.example.com
+    description: Production server
+
+tags:
+  - name: DateTime
+    description: DateTime and timezone operations
+  - name: Calculator
+    description: Mathematical calculations
+
+paths:
+  /api/datetime/now:
+    get:
+      tags:
+        - DateTime
+      summary: Get current datetime
+      description: Returns the current date and time in ISO format
+      responses:
+        '200':
+          description: Current datetime
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  datetime:
+                    type: string
+                    example: "2026-01-05T10:30:00.000Z"
+                  timestamp:
+                    type: number
+                    example: 1736073000000
+                  formatted:
+                    type: string
+                    example: "January 5, 2026 10:30:00 AM"
+
+  /api/datetime/timezone/{timezone}:
+    get:
+      tags:
+        - DateTime
+      summary: Get current datetime in specific timezone
+      description: Returns the current date and time in the specified timezone
+      parameters:
+        - in: path
+          name: timezone
+          required: true
+          schema:
+            type: string
+          description: Timezone name (e.g., America/New_York, Europe/London, Asia/Tokyo)
+          example: America/New_York
+      responses:
+        '200':
+          description: Current datetime in specified timezone
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timezone:
+                    type: string
+                    example: "America/New_York"
+                  datetime:
+                    type: string
+                    example: "2026-01-05T05:30:00-05:00"
+                  formatted:
+                    type: string
+                    example: "January 5, 2026 5:30:00 AM EST"
+                  offset:
+                    type: string
+                    example: "-05:00"
+        '400':
+          description: Invalid timezone
+
+  /api/timezones:
+    get:
+      tags:
+        - DateTime
+      summary: Get list of all available timezones
+      description: Returns a list of all valid timezone names
+      responses:
+        '200':
+          description: List of timezones
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: number
+                    example: 593
+                  timezones:
+                    type: array
+                    items:
+                      type: string
+                    example: ["America/New_York", "Europe/London", "Asia/Tokyo"]
+
+  /api/datetime/convert:
+    post:
+      tags:
+        - DateTime
+      summary: Convert datetime between timezones
+      description: Convert a datetime from one timezone to another
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - datetime
+                - fromTimezone
+                - toTimezone
+              properties:
+                datetime:
+                  type: string
+                  example: "2026-01-05 10:00:00"
+                fromTimezone:
+                  type: string
+                  example: "America/New_York"
+                toTimezone:
+                  type: string
+                  example: "Asia/Tokyo"
+      responses:
+        '200':
+          description: Converted datetime
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  original:
+                    type: object
+                  converted:
+                    type: object
+        '400':
+          description: Invalid input
+
+  /api/calculate/add:
+    post:
+      tags:
+        - Calculator
+      summary: Add two numbers
+      description: Returns the sum of two numbers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - a
+                - b
+              properties:
+                a:
+                  type: number
+                  example: 10
+                b:
+                  type: number
+                  example: 5
+      responses:
+        '200':
+          description: Sum result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculationResult'
+
+  /api/calculate/subtract:
+    post:
+      tags:
+        - Calculator
+      summary: Subtract two numbers
+      description: Returns the difference of two numbers (a - b)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TwoNumberInput'
+      responses:
+        '200':
+          description: Subtraction result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculationResult'
+
+  /api/calculate/multiply:
+    post:
+      tags:
+        - Calculator
+      summary: Multiply two numbers
+      description: Returns the product of two numbers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TwoNumberInput'
+      responses:
+        '200':
+          description: Multiplication result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculationResult'
+
+  /api/calculate/divide:
+    post:
+      tags:
+        - Calculator
+      summary: Divide two numbers
+      description: Returns the quotient of two numbers (a / b)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TwoNumberInput'
+      responses:
+        '200':
+          description: Division result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculationResult'
+        '400':
+          description: Division by zero error
+
+  /api/calculate/power:
+    post:
+      tags:
+        - Calculator
+      summary: Calculate power
+      description: Returns a raised to the power of b (a^b)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TwoNumberInput'
+      responses:
+        '200':
+          description: Power result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculationResult'
+
+  /api/calculate/sqrt:
+    post:
+      tags:
+        - Calculator
+      summary: Calculate square root
+      description: Returns the square root of a number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - number
+              properties:
+                number:
+                  type: number
+                  example: 16
+      responses:
+        '200':
+          description: Square root result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  operation:
+                    type: string
+                  number:
+                    type: number
+                  result:
+                    type: number
+        '400':
+          description: Negative number error
+
+  /api/calculate/percentage:
+    post:
+      tags:
+        - Calculator
+      summary: Calculate percentage
+      description: Calculate what percentage 'value' is of 'total'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - value
+                - total
+              properties:
+                value:
+                  type: number
+                  example: 25
+                total:
+                  type: number
+                  example: 100
+      responses:
+        '200':
+          description: Percentage result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  operation:
+                    type: string
+                  value:
+                    type: number
+                  total:
+                    type: number
+                  result:
+                    type: number
+                  formatted:
+                    type: string
+
+components:
+  schemas:
+    TwoNumberInput:
+      type: object
+      required:
+        - a
+        - b
+      properties:
+        a:
+          type: number
+          example: 10
+        b:
+          type: number
+          example: 5
+    
+    CalculationResult:
+      type: object
+      properties:
+        operation:
+          type: string
+        a:
+          type: number
+        b:
+          type: number
+        result:
+          type: number

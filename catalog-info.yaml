@@ -1,0 +1,41 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: datetime-timezone-api
+  description: API for datetime, timezone operations, and calculations
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: your-org/datetime-timezone-api
+  tags:
+    - nodejs
+    - api
+    - datetime
+    - timezone
+    - calculator
+  links:
+    - url: http://localhost:3005/api-docs
+      title: Swagger API Documentation
+      icon: docs
+spec:
+  type: service
+  lifecycle: production
+  owner: team-backend
+  system: datetime-system
+  providesApis:
+    - datetime-timezone-api
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: datetime-timezone-api
+  description: REST API for datetime, timezone, and calculation operations
+  tags:
+    - rest
+    - openapi
+spec:
+  type: openapi
+  lifecycle: production
+  owner: team-backend
+  system: datetime-system
+  definition:
+    $text: ./openapi.yaml
