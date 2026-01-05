@@ -1,0 +1,22 @@
+{
+  "name": "datetime-timezone-api",
+  "version": "1.0.0",
+  "description": "API for datetime and timezone operations",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "keywords": ["api", "datetime", "timezone"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "swagger-ui-express": "^5.0.0",
+    "swagger-jsdoc": "^6.2.8",
+    "moment-timezone": "^0.5.43"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
